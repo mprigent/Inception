@@ -1,0 +1,15 @@
+# OS sous lequel doit tourner la VM
+FROM	debian:buster
+
+# lance une commande sur la VM 
+RUN		apt-get update
+RUN		apt-get install -y nginx
+
+# fichier à copier depuis repertoire -> endroit ou le copier dans la VM
+COPY	tools/nginx.conf /etc/nginx/http.d/default.conf
+
+# informe docker que le conteneur écoute sur le port réseau spécifié (443 permet l'accèa par https)
+EXPOSE	443
+
+# Lance nginx en premier plan et non en background pour que le container ne se stop pas
+CMD	[ "nginx", "-g", "daemon off;" ]

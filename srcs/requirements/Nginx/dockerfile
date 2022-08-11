@@ -3,13 +3,13 @@ FROM	debian:buster
 
 # verifie les MAJ, installe Nginx, vim et curl
 RUN	apt-get update
-RUN	apt-get install nginx -y
-RUN	apt install vim -y
-RUN	apt install curl -y
+RUN	apt-get install -y nginx
+RUN	apt install -y vim
+RUN	apt install -y curl
 # crée un dossier pour stocker certificat et connexion sécurisée
 RUN mkdir -p /etc/nginx/ssl
 # télécharge OpenSSL (outil principal de gestion/création de certificats SSL)
-RUN apt install OpenSSL -y
+RUN apt install -y OpenSSL
 # req crée et traite principalement des demandes de certificats au format PKCS#10, -x509 pour préciser le type du certificat, -nodes = clé privée sans mot de passe, -subj permet de préremplir le prompt qui requiert certaines infos 
 RUN	openssl req -x509 -nodes -out /etc/nginx/ssl/inception.crt -keyout /etc/nginx/ssl/inception.key -subj "/C=FR/ST=IDF/L=Paris/O=42/OU=42/CN=mprigent.42.fr/UID=mprigent"
 # crée un dossier qui permettra de stocker les fichiers de config nginx

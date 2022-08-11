@@ -1,5 +1,6 @@
 FROM debian:buster
 
+# installer MariaDB
 RUN apt-get update -y
 RUN apt upgrade -y
 RUN apt-get install mariadb-server -y

@@ -12,3 +12,12 @@ RUN wget https://fr.wordpress.org/wordpress-6.0-fr_FR.tar.gz -P /var/www
 RUN cd /var/www && tar -xzf wordpress-6.0-fr_FR.tar.gz && rm wordpress-6.0-fr_FR.tar.gz
 # donne les droits à root d'écrire dans ce dossier
 RUN	chown -R root:root /var/www/wordpress
+# installe la CLI de WP(interface textuelle qui traite les commandes vers un programme informatique -> pratique pour la config automatique -mdp, nom, host)
+RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+# donne les droits à la CLI et place les binaires
+RUN chmod +x wp-cli.phar
+RUN mv wp-cli.phar /usr/local/bin/wp
+
+# copie le fichier de config dans le container 
+COPY conf/php.conf /etc/php/7.3/fpm/pool.d/www.conf
+COPY tools/auto_config.sh /usr/local/bin/auto_config.sh

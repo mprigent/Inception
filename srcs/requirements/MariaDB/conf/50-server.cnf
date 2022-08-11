@@ -1,0 +1,6 @@
+[mysqld]
+port = 3306 # port utilisé pour communiquer
+bind_address=* # toutes les IP du réseau peuvent se connecter
+datadir=/var/lib/mysql # dossier qui stockera notre base de données
+user=mysql # utilisateur
+socket = /run/mysqld/mysqld.sock # endroit où MySQL peut trouver la socket pour communiquer avec

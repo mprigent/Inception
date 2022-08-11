@@ -1,0 +1,44 @@
+version: ‘3’
+services:
+	mariadb:
+		container_name: mariadb         # Le nom du container
+		networks:
+		- inception                     # à quel network il appartient
+		build: 
+		context: requirements/mariadb   # ou se trouve son Dockerfile
+		dockerfile: Dockerfile          # le nom du Dockerfile ?!
+		env_file: 
+		-.env                           # le fichier d'environnement pour transmettre les variables
+		volumes:                        # Voir plus bas
+		- mariadb:/var/lib/mysql
+		restart: unless-stopped         # redémarre tant qu'il n'est pas stoppé 
+		expose:                         # le port à exposer
+		- "3306"
+
+	wordpress:
+		container_name: wordpress
+		networks:
+		- inception
+		build: ./requirements/wordpress
+		depends_on:
+		- mariadb
+		env_file:
+		- .env
+		volumes:
+		- wp:/var/www/html
+		restart: unless-stopped
+
+	nginx:
+		container_name: nginx
+		networks:
+		- inception
+		build:
+    context: ./requirements/nginx
+		depends_on:
+		- wordpress
+		volumes:
+		- wp:/var/www/html
+		restart: unless-stopped
+		expose:
+		- "443:443"
+	

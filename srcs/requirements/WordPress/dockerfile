@@ -21,3 +21,6 @@ RUN mv wp-cli.phar /usr/local/bin/wp
 # copie le fichier de config dans le container 
 COPY conf/php.conf /etc/php/7.3/fpm/pool.d/www.conf
 COPY tools/auto_config.sh /usr/local/bin/auto_config.sh
+
+ENTRYPOINT [ "/var/www/auto_config.sh" ]
+CMD ["/usr/sbin/php-fpm7.3 -F"]

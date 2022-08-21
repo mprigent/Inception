@@ -6,26 +6,57 @@
 #    By: mprigent <mprigent@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/09 23:36:32 by mprigent          #+#    #+#              #
-#    Updated: 2022/08/19 17:54:12 by mprigent         ###   ########.fr        #
+#    Updated: 2022/08/21 21:22:43 by mprigent         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME		=	inception
+PATH_YML = ./srcs/docker-compose.yml
+RED = "\033[1;31m"
+GREEN = "\033[1;32m"
+YELLOW = "\033[1;33m"
 
-all		: 	$(NAME)
+ifneq (,$(wildcard srcs/requirements/tools/data_path.txt))
+	path_file := srcs/requirements/tools/data_path.txt
+	variable := $(shell cat ${path_file})
+	wordpress_path := $(shell echo ${variable}/wordpress)
+	mariadb_path := $(shell echo ${variable}/mariadb)
+endif
 
-$(NAME)		:
-				sudo docker-compose -f srcs/docker-compose.yml up
 
-install		:
-				sudo docker-compose -f srcs/docker-compose.yml up --force-recreate --build
+all:
+ifeq (,$(wildcard ./srcs/requirements/tools/data_path.txt))
+	@bash srcs/requirements/tools/config.sh
+	@echo "Good!"
+	@echo "Use make to launch"
+else
+ifeq (,$(wildcard $(mariadb_path)))
+	@sudo mkdir -p $(mariadb_path)
+	@sudo mkdir -p $(wordpress_path)
+	@sudo chmod 777 $(mariadb_path)
+	@sudo chmod 777 $(wordpress_path)
+endif
+	@echo "Starting Inception..."
+	@sleep 1
+	@sudo docker-compose -f $(PATH_YML) up -d --build
+endif
 
-clean		:	
-				sudo docker-compose -f srcs/docker-compose.yml down
-re		:	fclean
-				sudo docker rm -f $(docker ps -aq);sudo docker rmi -f $(docker images -q);sudo docker builder prune;sudo docker-compose -f srcs/docker-compose.yml up --force-recreate --build
+re: clean all
 
-fclean		:	clean
-				sudo rm -rf /home/motoure/data/pages/* /home/motoure/data/db/* /home/motoure/data/socket/*
+stop:
+	@sudo docker-compose -f $(PATH_YML) stop
 
-.PHONY		:	all clean_host clean fclean
+
+clean: stop
+	@sudo docker-compose -f $(PATH_YML) down -v
+
+fclean: clean
+	@sudo rm -rf $(wordpress_path)
+	@sudo rm -rf $(mariadb_path)
+	@sudo docker system prune -af
+
+reset: clean
+	@rm srcs/requirements/tools/data_path.txt
+	@printf "\nPath is reset\n"
+
+config:
+	@bash srcs/requirements/tools/config.sh

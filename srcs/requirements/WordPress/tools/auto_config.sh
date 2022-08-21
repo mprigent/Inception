@@ -1,13 +1,13 @@
 # script qui permet d'utiliser la CLI (effectue les commandes necessaires au lancement du container)
-sleep 10 # précaution -> pour être sur que MariaDB a eu le temps de se lancer
 # wp-config.php n'existe pas -> permet d'indiquer les infos dont WP a besoin sans avoir a reconfigurer à chaque lancement
+
+if [ ! -e /var/www/wordpress/wp-config.php ]; then
 wp config create	--allow-root \
     				--dbname=$SQL_DATABASE \
     				--dbuser=$SQL_USER \
     				--dbpass=$SQL_PASSWORD \
     				--dbhost=mariadb:3306 --path='/var/www/wordpress'
 
-sleep 2
 wp core install     --url=$DOMAIN_NAME \
 					--title=$SITE_TITLE \
 					--admin_user=$ADMIN_USER \
@@ -21,8 +21,13 @@ wp user create      --allow-root \
 					--user_pass=$USER1_PASS \
 					--path='/var/www/wordpress' >> /log.txt
 					--skip-email # Don’t send an email notification to the new admin user.
+fi
 
-
+# if /run/php folder does not exist, create it
+if [ ! -d /run/php ]; then
+    mkdir ./run/php
+fi
+/usr/sbin/php-fpm7.3 -F
 
 # wp core install		--url=mprigent.42.fr # The address of the new site.
 # 					--title=Inception # The title of the new site.

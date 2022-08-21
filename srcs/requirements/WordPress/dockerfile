@@ -6,7 +6,7 @@
 #    By: mprigent <mprigent@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/09 23:36:32 by mprigent          #+#    #+#              #
-#    Updated: 2022/08/19 20:46:39 by mprigent         ###   ########.fr        #
+#    Updated: 2022/08/21 21:31:30 by mprigent         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,5 +34,4 @@ RUN mv wp-cli.phar /usr/local/bin/wp
 COPY conf/php.conf /etc/php/7.3/fpm/pool.d/www.conf
 COPY tools/auto_config.sh /usr/local/bin/auto_config.sh
 
-ENTRYPOINT [ "/var/www/auto_config.sh" ]
-CMD ["/usr/sbin/php-fpm7.3 -F"]
+ENTRYPOINT ["bash", "auto_config.sh"]

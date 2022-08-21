@@ -1,6 +1,6 @@
 
 
-version: "3"
+version: '3'
 
 services:
   mariadb:
@@ -35,15 +35,15 @@ services:
 
   nginx:
     container_name: nginx
+    volumes:
+      - wordpress:/var/www/wordpress
     networks:
       - inception
+    depends_on:                      # indique de ne pas démarrer Nginx tant que WP n'a pas démarré
+      - wordpress 
     build:
       context: ./requirements/nginx
       dockerfile: Dockerfile
-    depends_on:                      # indique de ne pas démarrer Nginx tant que WP n'a pas démarré
-      - wordpress 
-    volumes:
-      - wordpress:/var/www/wordpress
     env_file: .env
     ports:
       - "443:443"                     # port qui sera exposé à la machine locale

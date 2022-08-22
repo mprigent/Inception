@@ -1,1 +1,1 @@
-/Users/user42/data
+/home/user42/data

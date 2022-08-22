@@ -40,7 +40,7 @@ services:
     depends_on:                      # indique de ne pas démarrer Nginx tant que WP n'a pas démarré
       - wordpress 
     build:
-      context: ./srcs/requirements/Nginx
+      context: ./requirements/Nginx
       dockerfile: Dockerfile
     env_file: .env
     ports:

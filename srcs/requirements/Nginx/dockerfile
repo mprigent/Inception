@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    dockerfile                                         :+:      :+:    :+:    #
+#    Dockerfile                                         :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: mprigent <mprigent@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/09 23:36:32 by mprigent          #+#    #+#              #
-#    Updated: 2022/08/19 20:46:31 by mprigent         ###   ########.fr        #
+#    Updated: 2022/08/22 02:08:47 by mprigent         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ RUN	apt install -y curl
 # crée un dossier pour stocker certificat et connexion sécurisée
 RUN mkdir -p /etc/nginx/ssl
 # télécharge OpenSSL (outil principal de gestion/création de certificats SSL)
-RUN apt install -y OpenSSL
+RUN apt install -y openssl
 # req crée et traite principalement des demandes de certificats au format PKCS#10, -x509 pour préciser le type du certificat, -nodes = clé privée sans mot de passe, -subj permet de préremplir le prompt qui requiert certaines infos 
 RUN	openssl req -x509 -nodes -out /etc/nginx/ssl/inception.crt -keyout /etc/nginx/ssl/inception.key -subj "/C=FR/ST=IDF/L=Paris/O=42/OU=42/CN=mprigent.42.fr/UID=mprigent"
 # crée un dossier qui permettra de stocker les fichiers de config nginx

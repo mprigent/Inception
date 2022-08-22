@@ -1,5 +1,3 @@
-
-
 version: '3'
 
 services:
@@ -10,7 +8,7 @@ services:
     networks:
       - inception                     # à quel network il appartient
     build: 
-      context: requirements/mariadb   # ou se trouve son Dockerfile
+      context: ./requirements/MariaDB   # ou se trouve son Dockerfile
       dockerfile: Dockerfile          # le nom du Dockerfile ?!
     env_file: .env                    # le fichier d'environnement pour transmettre les variables
     restart: on-failure               # redémarre en cas d'echec
@@ -22,7 +20,7 @@ services:
     networks:
       - inception
     build: 
-        context: ./requirements/wordpress
+        context: ./requirements/WordPress
         dockerfile: Dockerfile
     depends_on:                     # WP démarrera après MariaDB (sinon il ne pourra pas configurer la base de données)
       - mariadb
@@ -42,7 +40,7 @@ services:
     depends_on:                      # indique de ne pas démarrer Nginx tant que WP n'a pas démarré
       - wordpress 
     build:
-      context: ./requirements/nginx
+      context: ./srcs/requirements/Nginx
       dockerfile: Dockerfile
     env_file: .env
     ports:
@@ -55,13 +53,13 @@ volumes:
     driver_opts:
       type: 'none'                    # aucun type spécifique
       o: 'bind'
-      device: '/Users/manonprigent/data/wordpress' #Ou stocker le dossier sur l'ordinateur en local
+      device: '$HOME_USER/data/wordpress' #Ou stocker le dossier sur l'ordinateur en local
   mariadb:
     driver: local
     driver_opts:
       type: 'none' 
       o: 'bind'                       # Les Bind Mounts sont des volumes qui se montent sur un chemin d'accès à l'hôte, et ils peuvent être modifiés par d'autres processus en dehors de docker.
-      device: '/Users/manonprigent/data/mariadb' #Ou stocker le dossier sur votre ordinateur en local
+      device: '$HOME_USER/data/mariadb' #Ou stocker le dossier sur votre ordinateur en local
 
 networks:
     inception:

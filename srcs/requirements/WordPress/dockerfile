@@ -1,19 +1,19 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    dockerfile                                         :+:      :+:    :+:    #
+#    Dockerfile                                         :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: mprigent <mprigent@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/09 23:36:32 by mprigent          #+#    #+#              #
-#    Updated: 2022/08/21 21:31:30 by mprigent         ###   ########.fr        #
+#    Updated: 2022/08/22 02:09:18 by mprigent         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FROM debian:buster
 
 RUN apt-get update
-RUN apt-get upgrade
+RUN apt-get upgrade -y
 # installe wget pour installer WP
 RUN apt-get -y install wget
 # installe PHP 

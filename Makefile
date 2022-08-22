@@ -6,7 +6,7 @@
 #    By: mprigent <mprigent@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/09 23:36:32 by mprigent          #+#    #+#              #
-#    Updated: 2022/08/21 21:22:43 by mprigent         ###   ########.fr        #
+#    Updated: 2022/08/22 02:08:47 by mprigent         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ endif
 
 all:
 ifeq (,$(wildcard ./srcs/requirements/tools/data_path.txt))
-	@bash srcs/requirements/tools/config.sh
+	@bash srcs/requirements/tools/conf.sh
 	@echo "Good!"
 	@echo "Use make to launch"
 else

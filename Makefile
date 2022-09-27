@@ -11,12 +11,11 @@
 # **************************************************************************** #
 
 PATH_YML = ./srcs/docker-compose.yml
-HOME_PATH = /home/user42/
 
 all:
-	@mkdir -p $(HOME_PATH)/data
-	@mkdir -p $(HOME_PATH)/data/wordpress
-	@mkdir -p $(HOME_PATH)/data/mariadb
+	@mkdir -p /home/user42/data
+	@mkdir -p /home/user42/data/wordpress
+	@mkdir -p /home/user42/data/mariadb
 	@sudo docker-compose -f $(PATH_YML) up -d --build
 
 re: clean all
@@ -28,6 +27,6 @@ clean: stop
 	@sudo docker-compose -f $(PATH_YML) down -v
 
 fclean: clean
-	@sudo rm -rf $(HOME_PATH)/data/wordpress
-	@sudo rm -rf $(HOME_PATH)/data/mariadb
+	@sudo rm -rf /home/user42/data/wordpress
+	@sudo rm -rf /home/user42/data/mariadb
 	@sudo docker system prune -af

@@ -6,16 +6,17 @@
 #    By: mprigent <mprigent@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/09 23:36:32 by mprigent          #+#    #+#              #
-#    Updated: 2022/09/20 18:10:38 by mprigent         ###   ########.fr        #
+#    Updated: 2022/09/28 16:54:38 by mprigent         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 PATH_YML = ./srcs/docker-compose.yml
+# HOME_PATH = /home/mprigent/
 
 all:
-	@mkdir -p /home/user42/data
-	@mkdir -p /home/user42/data/wordpress
-	@mkdir -p /home/user42/data/mariadb
+	@mkdir -p /home/mprigent/data
+	@mkdir -p /home/mprigent/data/wordpress
+	@mkdir -p /home/mprigent/data/mariadb
 	@sudo docker-compose -f $(PATH_YML) up -d --build
 
 re: clean all
@@ -27,6 +28,6 @@ clean: stop
 	@sudo docker-compose -f $(PATH_YML) down -v
 
 fclean: clean
-	@sudo rm -rf /home/user42/data/wordpress
-	@sudo rm -rf /home/user42/data/mariadb
+	@sudo rm -rf /home/mprigent/data/wordpress
+	@sudo rm -rf /home/mprigent/data/mariadb
 	@sudo docker system prune -af

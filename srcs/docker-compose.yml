@@ -1,0 +1,73 @@
+version: '3'
+
+services:
+  mariadb:
+    image: mariadb
+    container_name: mariadb            # Le nom du container
+    volumes:                           # volumes : stockercertains dossier en local au cas ou 
+      - mariadb:/var/lib/mysql
+    networks:                          # à quel network il appartient
+      - inception
+    build:
+      context: requirements/mariadb    # ou se trouve son Dockerfile
+      dockerfile: Dockerfile           # le nom du Dockerfile ?!
+    env_file: .env                     # le fichier d'environnement pour transmettre les variables
+    restart: on-failure                # "on-failure", container will be restarted 
+    expose:
+      - "3306"
+
+  nginx:           # with TLSv.1.2
+    image: nginx
+    container_name: nginx # name of the container
+    volumes:
+      - wordpress:/var/www/wordpress
+    networks:
+      - inception
+    depends_on:                       # indique de ne pas démarrer Nginx tant que WP n'a pas démarré
+      - wordpress
+    build: 
+      context: requirements/nginx
+      dockerfile: Dockerfile
+    env_file: .env
+    ports:
+      - "443:443"                   # port qui sera exposé à la machine locale
+    restart: on-failure
+
+  wordpress:
+    image: wordpress
+    container_name: wordpress
+    env_file: .env
+    volumes:
+    - wordpress:/var/www/wordpress
+    networks:
+      - inception
+    build: 
+      context: requirements/wordpress
+      dockerfile: Dockerfile
+    depends_on:                            # WP démarrera après MariaDB (sinon il ne pourra pas configurer la base de données)
+      - mariadb
+    restart: on-failure
+    expose: 
+      - "9000"
+
+
+## VOLUME CHECK
+
+volumes:                                   # stocke le volume en local
+  wordpress:
+    driver: local
+    driver_opts:
+      type: 'none'                          # aucun type spécifique
+      o: 'bind'
+      device: '/home/mprigent/data/wordpress'
+  mariadb:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'                           # Les Bind Mounts sont des volumes qui se montent sur un chemin d'accès à l'hôte, et ils peuvent être modifiés par d'autres processus en dehors de docker.
+      device: '/home/mprigent/data/mariadb'    #Ou stocker le dossier sur votre ordinateur en local
+
+#network part
+networks:
+    inception:
+      driver: bridge                       # indique a docker d'installer automatiquement les regles qui permettront au 3 containers de communiquer
